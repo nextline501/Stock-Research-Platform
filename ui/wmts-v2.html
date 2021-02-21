@@ -1,0 +1,87 @@
+<html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+      <title>WMTSLayer | Sample | ArcGIS API for JavaScript 4.18</title>
+      <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+  
+      <style>
+        html,
+        body,
+        #viewDiv {
+          padding: 0;
+          margin: 0;
+          height: 100%;
+          width: 100%;
+        }
+  
+        .esri-layer-list {
+          width: 310px;
+        }
+      </style>
+  
+      <script src="https://js.arcgis.com/4.18/"></script>
+  
+      <script>
+        var map, view;
+  
+        require(["esri/Map", "esri/views/MapView", "esri/layers/WMTSLayer", "esri/widgets/LayerList", "esri/geometry/SpatialReference","esri/layers/WMSLayer","esri/layers/FeatureLayer", "esri/layers/support/WMTSSublayer", "esri/widgets/BasemapToggle"], function(
+          Map,
+          MapView,
+          WMTSLayer,
+          LayerList,
+          SpatialReference,
+          WMSLayer,
+          FeatureLayer,
+          WMTSSublayer,
+          BasemapToggle,
+          ) {
+
+        layer = new WMTSLayer({
+            url: 'https://api.lantmateriet.se/open/topowebb-ccby/v1/wmts/token/8da087b7-a048-325d-9278-453423341763/?request=GetCapabilities&version=1.0.0&service=wmts',
+            activeLayer: {
+                id: "topowebb",
+          }
+        });
+
+        map = new Map({
+         basemap: "topo-vector",
+          layers: [layer],
+          center: [4.0, 60.0],
+          zoom: 9
+        });
+
+        view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [14.0, 58.0],
+          zoom:9
+        });
+
+        var biotopskyddLayer = new FeatureLayer({
+          url: "http://geodpags.skogsstyrelsen.se/arcgis/rest/services/Geodataportal/GeodataportalVisaBiotopskydd/MapServer"
+        });
+
+        var basemapToggle = new BasemapToggle({
+          view: view,
+          nextBasemap: "satellite"
+        });
+
+        view.when(function() {
+          view.extent = layer.fullExtent;
+          
+          var layerList = new LayerList({
+            view: view
+          });
+                  
+            map.add(biotopskyddLayer, 1)
+            view.ui.add(layerList, "bottom-left");
+        });
+            view.ui.add(basemapToggle, "bottom-right");
+      });
+      </script>
+    </head>
+    <body>
+      <div id="viewDiv"></div>
+    </body>
+</html>

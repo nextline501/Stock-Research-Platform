@@ -1,0 +1,8 @@
+se till att ha alla dependencies
+node
+express
+vercel
+command: vercel dev --listen 5501
+
+deployment:
+app och ui
