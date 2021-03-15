@@ -6,3 +6,7 @@ command: vercel dev --listen 5501
 
 deployment:
 app och ui
+
+setting upp vue:
+npm init vite-app ui
+npm run dev
